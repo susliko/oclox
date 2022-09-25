@@ -1,10 +1,6 @@
 open Oclox
 open Token
-
-let had_error = ref true
-let error line message = 
-  Reporting.report_error line message;
-  had_error := false
+open Reporting
 
 
 (* Runner *)

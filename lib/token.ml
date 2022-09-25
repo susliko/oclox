@@ -13,21 +13,46 @@ type token_type =
   EOF
   [@@deriving show]
 
+module Keywords = Map.Make(String)
+let keywords = 
+  Keywords.add "and" AND @@ 
+  Keywords.add "class" CLASS @@ 
+  Keywords.add "else" ELSE @@ 
+  Keywords.add "false" FALSE @@ 
+  Keywords.add "for" FOR @@ 
+  Keywords.add "fun" FUN @@ 
+  Keywords.add "if" IF @@ 
+  Keywords.add "nil" NIL @@ 
+  Keywords.add "or" OR @@ 
+  Keywords.add "print" PRINT @@ 
+  Keywords.add "return" RETURN @@ 
+  Keywords.add "super" SUPER @@ 
+  Keywords.add "this" THIS @@ 
+  Keywords.add "true" TRUE @@ 
+  Keywords.add "var" VAR @@ 
+  Keywords.add "while" WHILE @@ 
+  Keywords.empty
+
+
+type literal = 
+  NO_LIT |
+  STRING_LIT of string |
+  FLOAT_LIT of float
+  [@@deriving show]
 
 module Token = struct
   type t = {
     tpe: token_type;
     lexeme: string;
-    literal: string option;
+    literal: literal;
     line: int;
   }
 
   let show_token t = 
-    String.concat "" [
-      show_token_type t.tpe; " "; t.lexeme; " ";
-      (Option.value t.literal ~default:""); " at line ";
-      string_of_int t.line
-    ]
-end
+    Printf.sprintf "%s %s %s at line %d" 
+      (show_token_type t.tpe) 
+      t.lexeme 
+      (show_literal t.literal)
+      t.line end
 
 

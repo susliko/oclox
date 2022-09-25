@@ -1,0 +1,8 @@
+(executable
+ (public_name oclox)
+ (name main)
+ (libraries oclox))
+(env
+  (dev
+    (flags (:standard -warn-error -A))))
+

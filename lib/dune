@@ -1,0 +1,7 @@
+(library
+ (preprocess (pps ppx_deriving.show ppx_deriving.ord))
+ (name oclox))
+(env
+  (dev
+    (flags (:standard -warn-error -A))))
+

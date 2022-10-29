@@ -37,7 +37,8 @@ let keywords =
 type literal = 
   NO_LIT |
   STRING_LIT of string |
-  FLOAT_LIT of float
+  FLOAT_LIT of float |
+  BOOL_LIT of bool
   [@@deriving show]
 
 module Token = struct

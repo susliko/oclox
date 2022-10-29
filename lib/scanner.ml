@@ -16,7 +16,7 @@ class scanner (source: string) =
       done;
       let t: Token.t = { tpe=EOF; lexeme=""; literal=NO_LIT; line=line } in
       tokens <- List.cons t tokens;
-      tokens
+      List.rev tokens
 
     method is_at_end: bool = 
       current >= String.length source
@@ -42,6 +42,7 @@ class scanner (source: string) =
                    while s#peek != '\n' && not s#is_at_end do ignore(s#advance) done
                  else
                    s#add_token SLASH
+        (* TODO add multiline comments support /* */ *) 
         | ' ' | '\r' | '\t' -> ()
         | '\n' -> line <- line + 1
         | '"' -> s#string

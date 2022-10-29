@@ -11,7 +11,7 @@ class parser (tokens: Token.t list) =
 
     val mutable current = 0
     method private expression: expr =
-      p#equality
+      p#binary_op [COMMA] (fun _ -> p#equality)
 
     method private equality: expr = 
       p#binary_op [BANG_EQUAL; EQUAL_EQUAL] (fun _ -> p#comparison)
@@ -38,9 +38,10 @@ class parser (tokens: Token.t list) =
       else if p#matches [NIL] then Literal NO_LIT
       else if p#matches [NUMBER; STRING] then Literal p#previous.literal
       else if p#matches [LEFT_PAREN] then
+        let expr = p#expression in
         let msg = "Expect ')' after expression." in
         p#consume RIGHT_PAREN msg;
-        Grouping p#expression        
+        Grouping expr
       else p#raise_err p#peek "Expect expression."
 
     method private binary_op op_tokens try_next: expr = 

@@ -49,7 +49,7 @@ class scanner (source: string) =
         | c -> 
             if s#is_digit c then s#number
             else if s#is_alpha c then s#identifier
-            else Reporting.error line (Printf.sprintf "Unexpected character '%c'" c)
+            else Lox.error line (Printf.sprintf "Unexpected character '%c'" c)
 
     method private advance =
       let res = source.[current] in
@@ -74,7 +74,7 @@ class scanner (source: string) =
         ignore(s#advance)
       done;
       if s#is_at_end then
-        Reporting.error line "Unterminated string."
+        Lox.error line "Unterminated string."
       else
         let _ = s#advance in
         let value = String.sub source (start + 1) (current - start - 2) in

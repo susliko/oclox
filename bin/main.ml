@@ -1,6 +1,5 @@
 open Oclox
 open Token
-open Reporting
 
 
 let run code: unit = 
@@ -9,16 +8,20 @@ let run code: unit =
   let f (elem: Token.t) = print_endline (Token.show_token elem) in 
   List.iter f tokens;
   let parser = new Parser.parser tokens in
-  parser#parse |>  
-  Option.fold ~none:"No tokens!" ~some:AstPrinter.print |> 
-  print_endline
+  let expr = parser#parse in
+  match expr with
+    | None -> print_string "Parsing error"
+    | Some expr -> ignore(Lox.interpreter#interpret expr);
+  print_endline ""
   
 
 let run_file file = 
   let lines = Util.read_file file in 
   run lines;
-  if !had_error then
+  if !Lox.had_error then
     exit(65)
+  else if !Lox.had_runtime_error then
+    exit(70)
 
 let run_prompt () = 
   let continue = ref true in 
@@ -27,7 +30,7 @@ let run_prompt () =
     let line = read_line () in
     if not (line = "") then
       let _ = run line in
-      had_error := false
+      Lox.had_error := false
     else 
       continue := false
   done

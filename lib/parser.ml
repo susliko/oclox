@@ -79,7 +79,7 @@ class parser (tokens: Token.t list) =
       else p#report_err p#peek message
 
     method private report_err token message = 
-      Reporting.error_at_token token message;
+      Lox.error_at_token token message;
     
     method private raise_err token message = 
       p#report_err token message;
